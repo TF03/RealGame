@@ -41,6 +41,9 @@ public class GameRender {
         batch.setProjectionMatrix(camera.combined);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(camera.combined);
+
+        initGameObjects();
+        initAssets();
     }
 
     public void render(float delta, float runTime) {
@@ -64,12 +67,11 @@ public class GameRender {
         batch.begin();
         batch.disableBlending();
 
-        batch.draw(ResourseLoader.background, 0, midPointY + 23, 136, 43);
+        batch.draw(background, 0, midPointY + 23, 136, 43);
 
         batch.enableBlending();
 
-        batch.draw((TextureRegion) ResourseLoader.flyAnimation.getKeyFrame(runTime),
-                fly.getX(), fly.getY(), fly.getWidth(), fly.getHeight());
+        drawFly(runTime);
 
         batch.end();
     }
@@ -95,5 +97,18 @@ public class GameRender {
 
     private void initGameObjects() {
         fly = world.getFly();
+    }
+
+    private void drawFly(float runTime) {
+
+        if (fly.notFlap()) {
+            batch.draw(flyMid, fly.getX(), fly.getY(), fly.getWidth() / 2.0f, fly.getHeight() / 2.0f,
+                    fly.getWidth(), fly.getHeight(), 1, 1, fly.getRotation());
+        } else {
+            batch.draw((TextureRegion) flyAnimation.getKeyFrame(runTime),
+                    fly.getX(), fly.getY(), fly.getWidth() / 2.0f, fly.getHeight() / 2.0f,
+                    fly.getWidth(), fly.getHeight(), 1, 1, fly.getRotation());
+        }
+
     }
 }
