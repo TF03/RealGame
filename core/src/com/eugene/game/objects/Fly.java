@@ -53,7 +53,7 @@ public class Fly {
         if (isFalling()) {
             rotation += 480 * delta;
 
-            if (rotation < 90) {
+            if (rotation > 90) {
                 rotation = 90;
             }
         }
