@@ -42,8 +42,6 @@ public class SplashScreen implements Screen{
 
         setupTween();
         batch = new SpriteBatch();
-
-
     }
 
     private void setupTween(){
@@ -53,7 +51,7 @@ public class SplashScreen implements Screen{
         TweenCallback callback = new TweenCallback() {
             @Override
             public void onEvent(int type, BaseTween<?> source) {
-                // здесь мы будем вызывать GameScreen
+                game.setScreen(new GameScreen());
             }
         };
 
@@ -71,7 +69,6 @@ public class SplashScreen implements Screen{
         batch.begin();
         sprite.draw(batch);
         batch.end();
-
     }
 
     @Override
