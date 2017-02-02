@@ -1,8 +1,11 @@
 package com.eugene.game.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,6 +24,11 @@ public class GameRender {
     private SpriteBatch batch;
     private Fly fly;
 
+    public static Sprite background, grass, flyMid, spider, webUp, webDown, ready,
+            flyLogo, gameOver, highScore, scoreboard, starOn, starOff, retry;
+    public static Animation flyAnimation;
+    public static Music music;
+
     public GameRender(GameWorld world, int gameHeight, int midPointY, int midPointX) {
         this.world = world;
         this.midPointY = midPointY;
@@ -36,8 +44,6 @@ public class GameRender {
     }
 
     public void render(float delta, float runTime) {
-
-        Fly fly = world.getFly();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -66,5 +72,28 @@ public class GameRender {
                 fly.getX(), fly.getY(), fly.getWidth(), fly.getHeight());
 
         batch.end();
+    }
+
+    private void initAssets() {
+        background = ResourseLoader.background;
+        grass = ResourseLoader.grass;
+        flyAnimation = ResourseLoader.flyAnimation;
+        flyMid = ResourseLoader.fly2;
+        spider = ResourseLoader.spider;
+        webUp = ResourseLoader.webUp;
+        webDown = ResourseLoader.webDown;
+        ready = ResourseLoader.ready;
+        flyLogo = ResourseLoader.flyAndSpiders;
+        gameOver = ResourseLoader.gameOver;
+        highScore = ResourseLoader.highScore;
+        scoreboard = ResourseLoader.scoreboard;
+        retry = ResourseLoader.retry;
+        starOff = ResourseLoader.starOff;
+        starOn = ResourseLoader.starOn;
+        music = ResourseLoader.fly;
+    }
+
+    private void initGameObjects() {
+        fly = world.getFly();
     }
 }
