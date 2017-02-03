@@ -18,7 +18,7 @@ public class Moving {
     }
 
     public void update(float delta) {
-        position.add(velocity.cpy()).scl(delta);
+        position.add(velocity.cpy().scl(delta));
 
         if (position.x + width < 0) {
             isMovingLeft = true;

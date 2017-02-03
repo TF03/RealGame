@@ -80,8 +80,8 @@ public class GameRender {
 
         drawFly(runTime);
         drawGrass();
-        //drawWebs();
-        //drawSpiders();
+        drawWebs();
+        drawSpiders();
 
         batch.end();
     }
