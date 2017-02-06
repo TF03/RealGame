@@ -1,12 +1,18 @@
 package com.eugene.game.objects;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 public class Fly {
 
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
+
+    private Circle circle;
+    private boolean isAlive;
 
     private float rotation;
     private int width;
@@ -16,9 +22,17 @@ public class Fly {
         this.width = width;
         this.height = height;
 
+        circle = new Circle();
+        isAlive = true;
+
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 460);
+    }
+
+    public void die() {
+        isAlive = false;
+        velocity.y = 0;
     }
 
     public boolean isFalling() {
@@ -41,6 +55,8 @@ public class Fly {
         }
 
         position.add(velocity.cpy().scl(delta));
+
+        circle.set(position.x + 9, position.y + 6, 6.5f);
 
         if (velocity.y < 0) {
             rotation -= 600 * delta;
@@ -77,5 +93,13 @@ public class Fly {
 
     public float getRotation() {
         return rotation;
+    }
+
+    public Circle getCircle() {
+        return circle;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 }
