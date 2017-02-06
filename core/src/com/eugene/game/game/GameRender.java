@@ -2,6 +2,7 @@ package com.eugene.game.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -14,6 +15,12 @@ import com.eugene.game.objects.Fly;
 import com.eugene.game.objects.Grass;
 import com.eugene.game.objects.MovHandler;
 import com.eugene.game.objects.Web;
+import com.eugene.game.tools.Value;
+import com.eugene.game.tools.ValueAccessor;
+
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 
 public class GameRender {
 
@@ -36,6 +43,10 @@ public class GameRender {
     public static Animation flyAnimation;
     public static Music music;
 
+    private TweenManager manager;
+    private Value alpha = new Value();
+    private Color transitionColor;
+
     public GameRender(GameWorld world, int gameHeight, int midPointY, int midPointX) {
         this.world = world;
         this.midPointY = midPointY;
@@ -51,6 +62,9 @@ public class GameRender {
 
         initGameObjects();
         initAssets();
+
+        transitionColor = new Color();
+        prepareTransition(255, 255, 255, 0.3f);
     }
 
     public void render(float delta, float runTime) {
@@ -84,6 +98,7 @@ public class GameRender {
         drawSpiders();
 
         batch.end();
+        drawTransition(delta);
     }
 
     private void initAssets() {
@@ -150,5 +165,26 @@ public class GameRender {
         batch.draw(spider, web2.getX() - 1, web2.getY() + web2.getHeight() - 14, 24, 14);
 
         batch.draw(spider, web3.getX() - 1, web3.getY() + web3.getHeight() - 14, 24, 14);
+    }
+
+    public void prepareTransition(int r, int q, int b, float duration) {
+        transitionColor.set(r / 255.0f, q / 255.0f, b / 255.0f, 1);
+        alpha.setVal(1);
+        Tween.registerAccessor(Value.class, new ValueAccessor());
+        manager = new TweenManager();
+        Tween.to(alpha, -1, duration).target(0).ease(TweenEquations.easeOutQuad).start(manager);
+    }
+
+    private void drawTransition(float delta) {
+        if (alpha.getVal() > 0) {
+            manager.update(delta);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(transitionColor.r, transitionColor.g, transitionColor.b, alpha.getVal());
+            shapeRenderer.rect(0, 0, 136, 300);
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+        }
     }
 }

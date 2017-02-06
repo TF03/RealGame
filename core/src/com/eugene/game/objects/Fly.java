@@ -2,6 +2,7 @@ package com.eugene.game.objects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.eugene.game.loader.ResourseLoader;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 
@@ -40,11 +41,14 @@ public class Fly {
     }
 
     public boolean notFlap () {
-        return velocity.y > 70;
+        return velocity.y > 70 || !isAlive;
     }
 
     public void onClick() {
-        velocity.y = -140;
+        if (isAlive) {
+            velocity.y = -140;
+            ResourseLoader.flap.play();
+        }
     }
 
     public void update(float delta) {
@@ -52,6 +56,11 @@ public class Fly {
 
         if (velocity.y > 200) {
             velocity.y = 200;
+        }
+
+        if (position.y < -13) {
+            position.y = -13;
+            velocity.y = 0;
         }
 
         position.add(velocity.cpy().scl(delta));
@@ -101,5 +110,9 @@ public class Fly {
 
     public boolean isAlive() {
         return isAlive;
+    }
+
+    public void cling() {
+        acceleration.y = 0;
     }
 }

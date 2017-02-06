@@ -39,7 +39,7 @@ public class Web extends Moving {
 
     public boolean collides(Fly fly) {
         if (position.x < fly.getX() + fly.getWidth()) {
-            return Intersector.overlaps(fly.getCircle(), spider)
+            return (Intersector.overlaps(fly.getCircle(), spider))
                 || Intersector.overlaps(fly.getCircle(), webUp)
                 || Intersector.overlaps(fly.getCircle(), webDown);
         }
