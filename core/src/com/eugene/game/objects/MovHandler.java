@@ -1,6 +1,7 @@
 package com.eugene.game.objects;
 
 import com.eugene.game.game.GameWorld;
+import com.eugene.game.loader.ResourseLoader;
 
 public class MovHandler {
 
@@ -72,7 +73,44 @@ public class MovHandler {
         web3.stop();
     }
 
+    private void addScore(int increment) {
+        gameWorld.addScore(increment);
+    }
+
     public boolean collides(Fly fly) {
+        if (!web1.isScored() && web1.getX() + (web1.getWidth() / 2) < fly.getX()) {
+            addScore(1);
+            web1.setScored(true);
+            ResourseLoader.coin.play();
+        } else if (!web2.isScored() && web2.getX() + (web2.getWidth() / 2) < fly.getX()) {
+            addScore(1);
+            web2.setScored(true);
+            ResourseLoader.coin.play();
+        } else if (!web3.isScored() && web3.getX() + (web3.getWidth() / 2) < fly.getX()) {
+            addScore(1);
+            web3.setScored(true);
+            ResourseLoader.coin.play();
+        }
         return (web1.collides(fly) || web2.collides(fly) || web3.collides(fly));
+    }
+
+    public void onRestart() {
+        frontGrass.onRestart(0, MOV_SPEED);
+        backGrass.onRestart(frontGrass.getTailX(), MOV_SPEED);
+        web1.onRestart(210, MOV_SPEED);
+        web2.onRestart(web1.getTailX() + WEB_GAP, MOV_SPEED);
+        web3.onRestart(web2.getTailX() + WEB_GAP, MOV_SPEED);
+    }
+
+    public void updateReady(float delta) {
+
+        frontGrass.update(delta);
+        backGrass.update(delta);
+
+        if (frontGrass.isScrolledLeft()) {
+            frontGrass.reset(backGrass.getTailX());
+        } else if (backGrass.isScrolledLeft()) {
+            backGrass.reset(frontGrass.getTailX());
+        }
     }
 }

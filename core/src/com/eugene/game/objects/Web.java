@@ -10,6 +10,7 @@ public class Web extends Moving {
     private Rectangle spider, webUp, webDown;
 
     public static final int GAP = 45;
+    private boolean isScored = false;
 
     private Random r;
     private float groundY;
@@ -35,6 +36,7 @@ public class Web extends Moving {
     public void reset(float newX) {
         super.reset(newX);
         height = r.nextInt(90) + 15;
+        isScored = false;
     }
 
     public boolean collides(Fly fly) {
@@ -44,5 +46,18 @@ public class Web extends Moving {
                 || Intersector.overlaps(fly.getCircle(), webDown);
         }
         return false;
+    }
+
+    public boolean isScored() {
+        return isScored;
+    }
+
+    public void setScored(boolean b) {
+        isScored = b;
+    }
+
+    public void onRestart(float x, int movSpeed) {
+        velocity.x = movSpeed;
+        reset(x);
     }
 }

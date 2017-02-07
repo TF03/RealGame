@@ -1,6 +1,7 @@
 package com.eugene.game.loader;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -19,6 +20,8 @@ public class ResourseLoader {
     public static Sound dead, flap, coin, fall;
     public static Music fly;
     public static BitmapFont font, shadow, whiteFont;
+
+    private static Preferences preferences;
 
     public static void load(){
 
@@ -62,7 +65,22 @@ public class ResourseLoader {
         shadow = new BitmapFont(Gdx.files.internal("fonts/shadow.fnt"));
         shadow.getData().setScale(.25f, -.25f);
 
+        preferences = Gdx.app.getPreferences("FlyGame");
+
+        if (!preferences.contains("highScore")) {
+            preferences.putInteger("highScore", 0);
+        }
     }
+
+    public static void setHighScore(int val) {
+        preferences.putInteger("highScore", val);
+        preferences.flush();
+    }
+
+    public static int getHighScore() {
+        return preferences.getInteger("highScore");
+    }
+
     public static void dispose(){
         atlas.dispose();
 

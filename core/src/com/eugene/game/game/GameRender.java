@@ -17,6 +17,10 @@ import com.eugene.game.objects.MovHandler;
 import com.eugene.game.objects.Web;
 import com.eugene.game.tools.Value;
 import com.eugene.game.tools.ValueAccessor;
+import com.eugene.game.ui.InputHandler;
+import com.eugene.game.ui.PlayButton;
+
+import java.util.List;
 
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
@@ -47,10 +51,13 @@ public class GameRender {
     private Value alpha = new Value();
     private Color transitionColor;
 
+    private List<PlayButton> menuButtons;
+
     public GameRender(GameWorld world, int gameHeight, int midPointY, int midPointX) {
         this.world = world;
         this.midPointY = midPointY;
         this.midPointX = midPointX;
+        this.menuButtons = ((InputHandler) Gdx.input.getInputProcessor()).getMenuButtons();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(true, 136, gameHeight);
@@ -92,13 +99,40 @@ public class GameRender {
 
         batch.enableBlending();
 
-        drawFly(runTime);
         drawGrass();
         drawWebs();
         drawSpiders();
 
+        if (world.isRunning()) {
+            drawFly(runTime);
+            drawScore();
+        } else if (world.isReady()) {
+            drawFly(runTime);
+            drawReady();
+        } else if (world.isMenu()) {
+            drawFlyCentered(runTime);
+            drawMenuUI();
+        } else if (world.isGameOver()) {
+            drawScoreboard();
+            drawFly(runTime);
+            drawGameOver();
+            drawRetry();
+        } else if (world.isHighScore()) {
+            drawScoreboard();
+            drawFly(runTime);
+            drawHighScore();
+            drawRetry();
+        }
+
         batch.end();
         drawTransition(delta);
+
+        if (fly.isAlive()) {
+            music.play();
+            music.isLooping();
+        } else {
+            music.stop();
+        }
     }
 
     private void initAssets() {
@@ -186,5 +220,79 @@ public class GameRender {
             shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+    }
+
+    private void drawMenuUI() {
+        batch.draw(flyLogo, midPointX - 48, midPointY - 50, 96, 14);
+
+        for (PlayButton button : menuButtons) {
+            button.draw(batch);
+        }
+    }
+
+    private void drawScoreboard() {
+        batch.draw(scoreboard, 22, midPointY - 30, 97, 37);
+
+        batch.draw(starOff, 25, midPointY - 15, 10, 10);
+        batch.draw(starOff, 37, midPointY - 15, 10, 10);
+        batch.draw(starOff, 49, midPointY - 15, 10, 10);
+        batch.draw(starOff, 61, midPointY - 15, 10, 10);
+        batch.draw(starOff, 73, midPointY - 15, 10, 10);
+
+        if (world.getScore() > 2) {
+            batch.draw(starOn, 73, midPointY - 15, 10, 10);
+        }
+
+        if (world.getScore() > 17) {
+            batch.draw(starOn, 61, midPointY - 15, 10, 10);
+        }
+
+        if (world.getScore() > 50) {
+            batch.draw(starOn, 49, midPointY - 15, 10, 10);
+        }
+
+        if (world.getScore() > 80) {
+            batch.draw(starOn, 37, midPointY - 15, 10, 10);
+        }
+
+        if (world.getScore() > 120) {
+            batch.draw(starOn, 25, midPointY - 15, 10, 10);
+        }
+
+        int length = ("" + world.getScore()).length();
+
+        ResourseLoader.whiteFont.draw(batch, "" + world.getScore(), 104 - (2 * length), midPointY - 20);
+
+        int length2 = ("" + ResourseLoader.getHighScore()).length();
+
+        ResourseLoader.whiteFont.draw(batch, "" + ResourseLoader.getHighScore(), 104 - (2.5f * length2), midPointY - 3);
+    }
+
+    private void drawRetry() {
+        batch.draw(retry, 36, midPointY + 10, 66, 14);
+    }
+
+    private void drawReady() {
+        batch.draw(ready, 36, midPointY + 50, 68, 14);
+    }
+
+    private void drawGameOver() {
+        batch.draw(gameOver, 24, midPointY + 50, 92, 14);
+    }
+
+    private void drawScore() {
+        int length = ("" + world.getScore()). length();
+        ResourseLoader.shadow.draw(batch, "" + world.getScore(), 68 - (3 * length), midPointY - 82);
+        ResourseLoader.font.draw(batch, "" + world.getScore(), 68 - (3 * length), midPointY - 83);
+    }
+
+    private void drawHighScore() {
+        batch.draw(highScore, 22, midPointY - 50, 96, 14);
+    }
+
+    private void drawFlyCentered(float runTime) {
+        batch.draw((TextureRegion) flyAnimation.getKeyFrame(runTime), 59, fly.getY() - 15,
+                fly.getWidth() / 2.0f, fly.getHeight() / 2.0f,
+                fly.getWidth(), fly.getHeight(), 1, 1, fly.getRotation());
     }
 }
