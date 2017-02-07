@@ -13,19 +13,20 @@ public class Fly {
     private Vector2 acceleration;
 
     private Circle circle;
-    private boolean isAlive;
 
+    private boolean isAlive;
     private float rotation;
     private int width;
-    private int height;
+    private float height;
     private float originalY;
 
-    public Fly(float x, float y, int width, int height) {
+    public Fly(float x, float y, int width, int height){
         this.width = width;
         this.height = height;
-        originalY = y;
+        this.originalY = y;
 
         circle = new Circle();
+
         isAlive = true;
 
         position = new Vector2(x, y);
@@ -33,30 +34,26 @@ public class Fly {
         acceleration = new Vector2(0, 460);
     }
 
-    public void die() {
-        isAlive = false;
-        velocity.y = 0;
-    }
-
-    public boolean isFalling() {
+    public boolean isFalling(){
         return velocity.y > 110;
     }
 
-    public boolean notFlap () {
-        return velocity.y > 70 || !isAlive;
+    public boolean notFlap(){
+        return velocity.y >70 || !isAlive;
     }
 
-    public void onClick() {
+    public void onClick(){
         if (isAlive) {
             velocity.y = -140;
             ResourseLoader.flap.play();
         }
     }
 
-    public void update(float delta) {
+    public void update(float delta){
+
         velocity.add(acceleration.cpy().scl(delta));
 
-        if (velocity.y > 200) {
+        if (velocity.y > 200){
             velocity.y = 200;
         }
 
@@ -67,43 +64,46 @@ public class Fly {
 
         position.add(velocity.cpy().scl(delta));
 
-        circle.set(position.x + 9, position.y + 6, 6.5f);
+        circle.set(position.x + 9, position.y +6, 6.5f);
 
-        if (velocity.y < 0) {
+        if (velocity.y < 0){
             rotation -= 600 * delta;
 
-            if (rotation < -20) {
+            if (rotation < -20){
                 rotation = -20;
             }
         }
 
-        if (isFalling()) {
+        if(isFalling()){
             rotation += 480 * delta;
-
-            if (rotation > 90) {
+            if (rotation > 90){
                 rotation = 90;
             }
         }
     }
 
-    public float getX() {
+    public void die() {
+        isAlive = false;
+        velocity.y = 0;
+    }
+
+    public float getX(){
         return position.x;
     }
 
-    public float getY() {
+    public float getY(){
         return position.y;
     }
-
-    public int getHeight() {
-        return height;
+    public float getRotation() {
+        return rotation;
     }
 
     public int getWidth() {
         return width;
     }
 
-    public float getRotation() {
-        return rotation;
+    public float getHeight() {
+        return height;
     }
 
     public Circle getCircle() {

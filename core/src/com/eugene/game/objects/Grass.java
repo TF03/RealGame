@@ -6,8 +6,8 @@ public class Grass extends Moving {
         super(x, y, width, height, movSpeed);
     }
 
-    public void onRestart(float tailX, int movSpeed) {
-        position.x = tailX;
-        velocity.y = movSpeed;
+    public void onRestart(float x, float movSpeed) {
+        position.x = x;
+        velocity.x = movSpeed;
     }
 }

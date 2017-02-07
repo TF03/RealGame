@@ -26,8 +26,8 @@ public class GameWorld {
 
     public GameWorld(int midPointY, int midPointX) {
         currentState = GameState.MENU;
-        this.midPointY = midPointY;
         this.midPointX = midPointX;
+        this.midPointY = midPointY;
 
         fly = new Fly(33, midPointY - 5, 17, 12);
         movHandler = new MovHandler(this, midPointY + 66);
@@ -49,7 +49,7 @@ public class GameWorld {
         }
     }
 
-    public void updateReady(float delta) {
+    private void updateReady(float delta) {
         fly.updateReady(runTime);
         movHandler.updateReady(delta);
     }

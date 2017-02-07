@@ -7,12 +7,12 @@ import java.util.Random;
 
 public class Web extends Moving {
 
+    private Random r;
     private Rectangle spider, webUp, webDown;
 
     public static final int GAP = 45;
     private boolean isScored = false;
 
-    private Random r;
     private float groundY;
 
     public Web(float x, float y, int width, int height, float movSpeed, float groundY) {
@@ -41,9 +41,9 @@ public class Web extends Moving {
 
     public boolean collides(Fly fly) {
         if (position.x < fly.getX() + fly.getWidth()) {
-            return (Intersector.overlaps(fly.getCircle(), spider))
-                || Intersector.overlaps(fly.getCircle(), webUp)
-                || Intersector.overlaps(fly.getCircle(), webDown);
+            return (Intersector.overlaps(fly.getCircle(), webUp)
+                    || Intersector.overlaps(fly.getCircle(), webDown)
+                    || Intersector.overlaps(fly.getCircle(), spider));
         }
         return false;
     }
@@ -56,7 +56,7 @@ public class Web extends Moving {
         isScored = b;
     }
 
-    public void onRestart(float x, int movSpeed) {
+    public void onRestart(float x, float movSpeed) {
         velocity.x = movSpeed;
         reset(x);
     }

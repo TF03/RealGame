@@ -11,7 +11,7 @@ public class GameScreen implements Screen {
     private GameWorld world;
     private GameRender renderer;
 
-    private float runTime = 0;
+    private float runTime;
 
     public GameScreen() {
 

@@ -21,7 +21,6 @@ public class MovHandler {
         web2 = new Web(web1.getTailX() + WEB_GAP, 0, 22, 70, MOV_SPEED, yPos);
         web3 = new Web(web2.getTailX() + WEB_GAP, 0, 22, 60, MOV_SPEED, yPos);
     }
-
     public void update(float delta) {
 
         frontGrass.update(delta);
@@ -78,15 +77,22 @@ public class MovHandler {
     }
 
     public boolean collides(Fly fly) {
-        if (!web1.isScored() && web1.getX() + (web1.getWidth() / 2) < fly.getX()) {
+        if (!web1.isScored()
+                && web1.getX() + (web1.getWidth() / 2) < fly.getX()
+                + fly.getWidth()) {
             addScore(1);
             web1.setScored(true);
             ResourseLoader.coin.play();
-        } else if (!web2.isScored() && web2.getX() + (web2.getWidth() / 2) < fly.getX()) {
+        } else if (!web2.isScored()
+                && web2.getX() + (web2.getWidth() / 2) < fly.getX()
+                + fly.getWidth()) {
             addScore(1);
             web2.setScored(true);
             ResourseLoader.coin.play();
-        } else if (!web3.isScored() && web3.getX() + (web3.getWidth() / 2) < fly.getX()) {
+
+        } else if (!web3.isScored()
+                && web3.getX() + (web3.getWidth() / 2) < fly.getX()
+                + fly.getWidth()) {
             addScore(1);
             web3.setScored(true);
             ResourseLoader.coin.play();
