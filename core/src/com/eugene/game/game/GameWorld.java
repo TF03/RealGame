@@ -70,10 +70,7 @@ public class GameWorld {
             renderer.prepareTransition(255, 255, 255, 0.3f);
             currentState = GameState.GAMEOVER;
 
-            if (score > ResourseLoader.getHighScore()) {
-                ResourseLoader.setHighScore(score);
-                currentState = GameState.HIGHSCORE;
-            }
+            highScore();
         }
         if (Intersector.overlaps(fly.getCircle(), ground)) {
             if (fly.isAlive()) {
@@ -85,10 +82,14 @@ public class GameWorld {
             fly.cling();
             currentState = GameState.GAMEOVER;
 
-            if (score > ResourseLoader.getHighScore()) {
-                ResourseLoader.setHighScore(score);
-                currentState = GameState.HIGHSCORE;
-            }
+            highScore();
+        }
+    }
+
+    private void highScore() {
+        if (score > ResourseLoader.getHighScore()) {
+            ResourseLoader.setHighScore(score);
+            currentState = GameState.HIGHSCORE;
         }
     }
 
