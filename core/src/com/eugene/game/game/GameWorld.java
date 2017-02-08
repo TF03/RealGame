@@ -69,6 +69,11 @@ public class GameWorld {
             ResourseLoader.fall.play();
             renderer.prepareTransition(255, 255, 255, 0.3f);
             currentState = GameState.GAMEOVER;
+
+            if (score > ResourseLoader.getHighScore()) {
+                ResourseLoader.setHighScore(score);
+                currentState = GameState.HIGHSCORE;
+            }
         }
         if (Intersector.overlaps(fly.getCircle(), ground)) {
             if (fly.isAlive()) {
